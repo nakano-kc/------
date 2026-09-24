@@ -12,7 +12,7 @@ import streamlit as st #-------------Web画面を作る
 # import pandas as pd #----------------表データを扱う
 import os #--------------------------コンピューター上のファイルやフォルダなどを操作する
 # import json #------------------------JSON形式のデータを扱う（今回はカテゴリ情報を扱う）
-# import matplotlib.pyplot as plt #----グラフを作る
+#import matplotlib.pyplot as plt #----グラフを作る
 # import openpyxl #--------------------Excelを扱う
 # from openpyxl.styles import PatternFill, Font, Alignment, Border, Side
 # from openpyxl.utils import get_column_letter
@@ -20,6 +20,7 @@ import os #--------------------------コンピューター上のファイルや�
 import streamlit_authenticator as stauth
 import yaml
 from yaml.loader import SafeLoader
+
 
 
 st.set_page_config(
@@ -139,7 +140,6 @@ pg.run()
 
 # # matplotlibの日本語フォント設定
 # plt.rcParams['font.family'] = 'MS Gothic'
-
 
 # アプリのタイトル名
 #st.title("家計簿アプリ")

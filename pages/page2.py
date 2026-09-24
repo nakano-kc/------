@@ -12,8 +12,8 @@ from utils import export_excel
 import streamlit as st
 from datetime import date
 import pandas as pd
+import platform
 import matplotlib.pyplot as plt
-
 
 st.set_page_config(
     page_title="集計管理",
@@ -32,7 +32,10 @@ st.sidebar.write(f"ログイン中：{name}")
 
 csv_file = f"kakeibo_{username}.csv"
 
-plt.rcParams['font.family'] = 'MS Gothic'
+if platform.system() == 'Windows':
+    plt.rcParams['font.family'] = 'MS Gothic'
+else:
+    plt.rcParams['font.family'] = 'DejaVu Sans'
 
 st.title("📈 集計管理")
 
