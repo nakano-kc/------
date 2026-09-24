@@ -1,0 +1,30 @@
+﻿cookie:
+  expiry_days: 30
+  key: change_me_to_random_secret_key
+  name: streamlit_auth_cookie
+credentials:
+  usernames:
+    admin:
+      email: admin@example.com
+      first_name: Admin
+      last_name: User
+      password: $2b$12$1WvQYAFCpNdGySM4E4flzuWF9CxcwNqBoxqWmD06L0xB35QzRIbvi
+      roles:
+      - admin
+    nakano:
+      email: m.nakano@kc-factory.co.jp
+      first_name: misaki
+      last_name: nakano
+      logged_in: false
+      password: $2b$12$9499SH1zSJzG8czgrVj1k.d1R/DI.vem85DpptcHl9Q4xdkZdZLh2
+      password_hint: t1
+      roles: null
+    user01:
+      email: user01@example.com
+      first_name: Normal
+      last_name: User
+      password: $2b$12$YDP/SB8rcxhR9yj4uj8Fz.kBA0U/KIUC6jWQJfmHb/KtbGyaOUTNe
+      roles:
+      - viewer
+preauthorized:
+  emails: []
