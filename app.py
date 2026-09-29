@@ -24,8 +24,8 @@ from yaml.loader import SafeLoader
 
 
 st.set_page_config(
-    page_title="ログインページ",
-    page_icon="🔑",
+    page_title="家計簿アプリ-ログイン",
+    page_icon="🏡",
     layout="wide"
 )
 with open("config.yaml", "r", encoding="utf-8-sig") as file:

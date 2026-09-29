@@ -20,7 +20,7 @@ import yaml
 from yaml.loader import SafeLoader
 
 st.set_page_config(
-    page_title="ホーム",
+    page_title="家計簿アプリ",
     page_icon="🏠",
     layout="wide"
 )
@@ -58,7 +58,7 @@ with tab1:
     input_date = st.date_input("日付", date.today())
     
     # 種別選択(category_type == "種別")
-    category_type = st.selectbox("種別", ["収入","支出"])
+    category_type = st.selectbox("種別", ["支出","収入"])
 
     with st.expander(f"🛠️ {category_type}のカテゴリを追加・削除する"):
         col_add, col_del = st.columns(2)
@@ -130,6 +130,17 @@ with tab1:
         item = st.text_input("項目", "品目、お店", key="input_item_expence")
     # 金額入力(amount == "金額")
     amount = st.number_input("金額", min_value=0, value=500, key="input_amount")
+    col_reason, emotion = st.columns(2)
+    with col_reason:
+        if category_type == "支出":
+            reason = st.radio("購入理由", ["必要", "ご褒美", "ストレス発散", "衝動買い","欲しかった", "なんとなく", "安かった"])
+        else:
+            reason = "-----"
+
+    # input[type="radio"]:checked + div {
+    #     background:red !Imortant;
+    # }
+
 
     # 登録ボタンが押されたときの処理
     if st.button("登録"):
@@ -144,7 +155,8 @@ with tab1:
                 "種別": [category_type],
                 "カテゴリ": [category],
                 "項目": [item],
-                "金額": [amount]
+                "金額": [amount],
+                "購入理由": [reason]
             })
 
             # CSVファイルが存在するか確認
@@ -166,7 +178,7 @@ with tab1:
     # CSVファイルが存在する場合
     if os.path.exists(csv_file):
         # フィルターを3列に分けて横並びに表示する
-        fc1, fc2, fc3, fc4 = st.columns(4)
+        fc1, fc2, fc3, fc4,fc5 = st.columns(5)
         # CSVファイルをDataFrameとして読み込む
         df_edit = pd.read_csv(csv_file)
         # 表示対象をログインしたユーザーに絞り込む
@@ -181,7 +193,18 @@ with tab1:
         # 1列目：年月フィルター
         with fc1:
             date_options = df_edit["日付"].dt.strftime("%Y/%m").unique()
-            filter_date = st.selectbox("日付", date_options, key="filter_date")
+            # 起動時の日付の年月文字列を作る（例：("2026/09")）
+            current_ym = date.today().strftime("%Y/%m")
+            # デフォルトのインデックスを指定
+            default_index = 0
+            if current_ym in date_options:
+                # 今月のデータがあればその位置を固定
+                default_index = list(date_options).index(current_ym)
+            elif len(date_options) > 0:
+                # 今月のデータがなければ、一番新しい(リストの最後にある)月を固定
+                default_index = len(date_options) - 1
+
+            filter_date = st.selectbox("日付", date_options, index=default_index, key="filter_date")
 
         # 2列目：種別フィルター　〈「全て」「収入」「支出」から選択する〉
         with fc2:
@@ -208,8 +231,16 @@ with tab1:
             # カテゴリを選択する
             filter_category = st.selectbox("カテゴリ", options, key="filter_category")
 
-        # 4列目：キーワードフィルター　〈項目名を検索するための入力欄〉
+        # 4列目：購入理由フィルター　〈支出で絞り込んだ際に表示するフィルター〉
+        #if filter_type == "支出" :
         with fc4:
+            # if filter_type == "全て" :
+                # options = ["全て"] + sorted(set(c for v in categories.values() for c in v))
+            # filter_reason = st.selectbox("購入理由", options, key="filter_reason") 
+            filter_reason = st.selectbox("購入理由", ["必要", "ご褒美", "ストレス発散", "衝動買い","欲しかった", "なんとなく", "安かった"], key="filter_reason")
+
+        # 5列目：キーワードフィルター　〈項目名を検索するための入力欄〉
+        with fc5:
             filter_keyword = st.text_input("キーワード（項目名）", "", key="filter_keyword")
         # 日付が一致するデータだけに絞り込む
         if filter_date:
@@ -220,6 +251,10 @@ with tab1:
         # カテゴリが「全て」ではない場合－選択したカテゴリのデータだけに絞り込む
         if filter_category != "全て":
             df_edit = df_edit[df_edit["カテゴリ"] == filter_category]
+        if filter_type == "支出":
+        # 購入理由が一致するデータだけに絞り込む
+            if filter_reason:
+                df_edit = df_edit[df_edit["購入理由"] == filter_reason]
         # キーワードが入力されている場合－「項目」列にキーワードを含むデータだけに絞り込む
         if filter_keyword:
             df_edit = df_edit[df_edit["項目"].str.contains(filter_keyword, na=False)]
@@ -239,7 +274,7 @@ with tab1:
                 "削除":st.column_config.CheckboxColumn("削除", default=False),
             } ,
             # 表示する列の順番を指定
-            column_order=["日付", "種別", "カテゴリ", "項目", "金額", "削除"],
+            column_order=["日付", "種別", "カテゴリ", "項目", "金額","購入理由", "削除"],
             # 行番号を表示しない
             hide_index=False,
             # 表の横幅を画面いっぱいにする
@@ -268,12 +303,13 @@ with tab1:
                     # 元のCSVの行番号を取得
                     original_index = int(row["_元の行番号"])
                     # 元の行を更新する
-                    all_df.loc[original_index, ["日付", "種別", "カテゴリ", "項目", "金額"]] = [
+                    all_df.loc[original_index, ["日付", "種別", "カテゴリ", "項目", "金額", "購入理由"]] = [
                         row["日付"],
                         row["種別"],
                         row["カテゴリ"],
                         row["項目"],
-                        row["金額"]
+                        row["金額"],
+                        row["購入理由"]
                     ]
                 # 全データをCSVに保存
                 all_df.to_csv(csv_file, index=False, encoding="utf-8-sig")
