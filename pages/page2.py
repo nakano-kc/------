@@ -15,12 +15,12 @@ import pandas as pd
 import platform
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
+import matplotlib_fontja
 
-# フォントキャッシュをクリアして再構築させる
-fm._rebuild() if hasattr(fm, '_rebuild') else fm.fontManager.__init__()
+# # フォントキャッシュをクリアして再構築させる
+# fm._rebuild() if hasattr(fm, '_rebuild') else fm.fontManager.__init__()
 
-# フォントの設定
-plt.rcParams['font.family'] = 'sans-serif'
+
 
 st.set_page_config(
     page_title="集計管理",
@@ -39,10 +39,10 @@ st.sidebar.write(f"ログイン中：{name}")
 
 csv_file = f"kakeibo_{username}.csv"
 
-if platform.system() == 'Windows':
-    plt.rcParams['font.family'] = 'MS Gothic'
-else:
-    plt.rcParams['font.family'] = 'DejaVu Sans'
+# if platform.system() == 'Windows':
+#     plt.rcParams['font.family'] = 'MS Gothic'
+# else:
+#     plt.rcParams['font.family'] = 'DejaVu Sans'
 
 st.title("📈 集計管理")
 
