@@ -14,6 +14,7 @@ from datetime import date
 import pandas as pd
 import platform
 import matplotlib.pyplot as plt
+import japanize_matplotlib
 
 plt.rcParams['font.family'] = 'Noto Sans CJK JP'
 
