@@ -3,4 +3,4 @@ pandas
 matplotlib
 openpyxl
 streamlit-authenticator
-japanize-matplotlib
+matplotlib_fontja
