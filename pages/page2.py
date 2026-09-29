@@ -207,7 +207,7 @@ with tab_yearly:
             st.info("この年のデータはありません")
         else:
             # 月・種別ごとに金額を合計
-            monthly_bar = filtered.groupby([filtered["日付"].dt.month, "種別"])["金額 "].sum().unstack(fill_value=0)
+            monthly_bar = filtered.groupby([filtered["日付"].dt.month, "種別"])["金額"].sum().unstack(fill_value=0)
             # 棒の幅
             width = 0.4
             # 棒グラフを作成(bar == 棒グラフの形式)
@@ -221,7 +221,7 @@ with tab_yearly:
             # グラフの設定
             ax3.set_title("月別推移")
             ax3.set_xlabel("月")
-            ax3.set_ylabel("金額    ", rotation=0)
+            ax3.set_ylabel("金額         ", rotation=0)
             ax3.set_xticks(range(1, 13))
             #ax3.tick_params(labelsize=8)
             ax3.legend()
