@@ -14,9 +14,13 @@ from datetime import date
 import pandas as pd
 import platform
 import matplotlib.pyplot as plt
-import matplotlib
+import matplotlib.font_manager as fm
 
-matplotlib.rcParams['font.family'] = 'Noto Sans CJK JP'
+# フォントキャッシュをクリアして再構築させる
+fm._rebuild() if hasattr(fm, '_rebuild') else fm.fontManager.__init__()
+
+# フォントの設定
+plt.rcParams['font.family'] = 'sans-serif'
 
 st.set_page_config(
     page_title="集計管理",
