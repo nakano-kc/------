@@ -207,7 +207,7 @@ with tab_yearly:
             st.info("この年のデータはありません")
         else:
             # 月・種別ごとに金額を合計
-            monthly_bar = filtered.groupby([filtered["日付"].dt.month, "種別"])["金額"].sum().unstack(fill_value=0)
+            monthly_bar = filtered.groupby([filtered["日付"].dt.month, "種別"])["金額 "].sum().unstack(fill_value=0)
             # 棒の幅
             width = 0.4
             # 棒グラフを作成(bar == 棒グラフの形式)
