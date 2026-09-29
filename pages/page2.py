@@ -14,9 +14,9 @@ from datetime import date
 import pandas as pd
 import platform
 import matplotlib.pyplot as plt
-import matplotlib_fontja
+import matplotlib
 
-plt.rcParams['font.family'] = 'Noto Sans CJK JP'
+matplotlib.rcParams['font.family'] = 'Noto Sans CJK JP'
 
 st.set_page_config(
     page_title="集計管理",
