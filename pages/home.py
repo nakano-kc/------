@@ -2,11 +2,11 @@
 import sys
 import os
 
-# pages/ フォルダの「ひとつ上の親フォルダ（ルート）」をパスに追加する
-current_dir = os.path.dirname(os.path.abspath(__file__))
-root_dir = os.path.dirname(current_dir)
-if root_dir not in sys.path:
-    sys.path.insert(0, root_dir)
+# current_dir = os.path.dirname(os.path.abspath(__file__))
+# root_dir = os.path.dirname(current_dir)
+# csv_file = os.path.join(root_dir, f"kakeibo_{username}.csv")
+
+
 
 # パッケージとしてインポートする
 from utils import load_categories, save_categories, export_excel
@@ -32,8 +32,17 @@ if not st.session_state.get("authentication_status"):
 name = st.session_state.get("name")
 username = st.session_state.get("username")
 
-csv_file = f"kakeibo_{username}.csv"
-csv_file = f"kakeibo_{username}.csv"
+# pages/ フォルダの「ひとつ上の親フォルダ（ルート）」をパスに追加する
+current_dir = os.path.dirname(os.path.abspath(__file__))
+root_dir = os.path.dirname(current_dir)
+if root_dir not in sys.path:
+    sys.path.insert(0, root_dir)
+
+# 正しいルートフォルダに保存するためのパス
+csv_file = os.path.join(root_dir, f"kakeibo_{username}.csv")
+
+# パッケージとしてインポートする
+from utils import load_categories, save_categories, export_excel
 
 # セッションにカテゴリが保存されていない、またはNoneの場合は読み込む
 if "categories" not in st.session_state or st.session_state["categories"] is None:
@@ -46,13 +55,13 @@ st.title("📝 収支管理")
 # st.info("このページはログイン済みユーザーが閲覧できます")
 
 # タブ構成
-tabs = st.tabs(["📝 入力"])
+tabs = st.tabs(["📋 入力"])
 tab1 = tabs[0]
 
 # 入力画面
 with tab1:
     # 入力フォーム
-    st.subheader("📝 支出・収入を入力")
+    st.subheader("支出・収入を入力")
     # ユーザーから家計簿データを入力
     # 日付入力
     input_date = st.date_input("日付", date.today())
@@ -172,6 +181,7 @@ with tab1:
             # CSV形式で保存
             df.to_csv(csv_file, index=False, encoding="utf-8-sig")
             st.success(f"✅ {input_date} | {category} | {item}:{amount}円を登録しました！")
+            st.write(f"現在の保存先: {os.path.abspath(csv_file)}")
 
     # 登録済みのデータを表示★
     st.subheader("📊 登録済みデータ")

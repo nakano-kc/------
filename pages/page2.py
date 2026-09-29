@@ -35,8 +35,6 @@ if not st.session_state.get("authentication_status"):
 name = st.session_state.get("name")
 username = st.session_state.get("username")
 
-st.sidebar.write(f"ログイン中：{name}")
-
 csv_file = f"kakeibo_{username}.csv"
 
 # if platform.system() == 'Windows':
@@ -123,7 +121,7 @@ with tab_monthly:
             category_summary.index = category_summary.index + 1
             st.dataframe(category_summary, use_container_width=True)
             # 月次グラフ ★
-            col_left, col_center, col_right = st.columns(3)
+            col_left, col_right = st.columns(2)
             # 左側の列で支出グラフを作成する
             with col_left:
                 #「支出」のデータだけを取り出す
@@ -135,10 +133,21 @@ with tab_monthly:
                     exp_summary = exp_summary.sort_values(ascending=False)
                     # 円グラフを作成する
                     fig1, ax1 = plt.subplots(figsize=(4, 3.5))
+
+                    # 3%以下の場合は非表示にする
+                    def autopct_format(pct):
+                        return f"{pct:.1f}%" if pct >= 3.0 else ""
                 
                     # カテゴリごとの支出金額を円グラフで表示する
-                    wedges, texts, autotexts = ax1.pie(exp_summary, labels=None, autopct="%1.1f%%",
-                                        startangle=90, counterclock=False, textprops={'fontsize': 10, 'color':'white'})
+                    wedges, texts, autotexts = ax1.pie(
+                        exp_summary,
+                        labels=None,
+                        autopct=autopct_format,
+                        startangle=90,
+                        counterclock=False,
+                        textprops={'fontsize': 8, 'color':'white'}
+                    )
+
                     ax1.set_title("支出内訳", fontsize=15)
                     # 合計金額を小さい円グラフに重ねて表示する
                     total = exp_summary.sum()
@@ -155,7 +164,7 @@ with tab_monthly:
                     st.pyplot(fig1, use_container_width=False)
                     # 使用したグラフを閉じて後片付けする
                     plt.close(fig1)
-            with col_center:
+            with col_right:
             
                 # カテゴリごとの金額を合計する
                 for i, (category, amount) in enumerate(exp_summary.items()):
@@ -172,7 +181,7 @@ with tab_monthly:
                     rgb_color = f"rgb({r}, {g}, {b})"
                     # 色・カテゴリ・金額・割合を画面に表示
                     st.markdown(
-                        f'<span style="color:{rgb_color}; font-size:60px; vertical-align:middle">■</span> {category} {amount}円 ({percentage:.1f}%)',
+                        f'<span style="Line-height: 1.0; margin-bottom: 5px;"><span style="color:{rgb_color}; font-size:60px; vertical-align:middle">■</span> {category} {amount}円 ({percentage:.1f}%)',
                         unsafe_allow_html=True
                         )
 
@@ -214,10 +223,10 @@ with tab_yearly:
             fig3, ax3 = plt.subplots(figsize=(6, 2), dpi=150)
             # 収入を棒グラフで表示
             if "収入" in monthly_bar.columns:
-                ax3.bar(monthly_bar.index - width / 2, monthly_bar["収入"], width=width, label="収入", color="#2CA02C")
+                ax3.bar(monthly_bar.index - width / 2, monthly_bar["収入"], width=width, label="収入", color="#61b250")
             # 支出を棒グラフで表示
             if "支出" in monthly_bar.columns:
-                ax3.bar(monthly_bar.index + width / 2, monthly_bar["支出"], width=width, label="支出", color="#1F77B4")
+                ax3.bar(monthly_bar.index + width / 2, monthly_bar["支出"], width=width, label="支出", color="#2B8BCF")
             # グラフの設定
             ax3.set_title("月別推移")
             ax3.set_xlabel("月")
