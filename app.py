@@ -101,10 +101,16 @@ if not st.session_state.get("authentication_status"):
                 st.error("このユーザー名またはメールアドレスは既に使用されています。")
             elif "Captcha entered incorrectly" in error_message:
                 st.error("画像認証の入力が正しくありません。")
-            elif "characters" in error_message or "Password" in error_message:
-                st.error("入力形式が正しくないか、パスワードの要件を満たしていません。")
-            elif "not valid" in error_message:
-                st.error("未入力の項目があります。すべての項目を入力してください。")
+            # elif "characters" in error_message or "Password" in error_message:
+            #     st.error("入力形式が正しくないか、パスワードの要件を満たしていません。")
+            elif "Password must" in error_message:
+                st.error("パスワードが正しくありません。大文字・数字・特殊文字('@$!%*?&')を含む、8文字以上20文字以下で入力してください。")
+            # elif "not valid" in error_message:
+            #     st.error("未入力の項目があります。すべての項目を入力してください。")
+            elif "Username is not valid" in error_message:
+                st.error("『ユーザー名』が正しくありません。英数字を使用してください。")
+            elif "Email is not valid" in error_message:
+                st.error("『メールアドレス』のが正しくありません。半角英数字で入力されているか確認してください。")
             else:
                 st.error(f"登録エラーが発生しました：{error_message}")
 

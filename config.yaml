@@ -26,5 +26,13 @@ credentials:
       password: $2b$12$YDP/SB8rcxhR9yj4uj8Fz.kBA0U/KIUC6jWQJfmHb/KtbGyaOUTNe
       roles:
       - viewer
+    user02:
+      email: user02@example.com
+      first_name: Nomal
+      last_name: User
+      logged_in: false
+      password: $2b$12$J.cd/IYJXnEaG.eDNH2ieOBKdmoq.ZumjJe/3wI8QbPih8JQt8ig2
+      password_hint: Te@1
+      roles: null
 preauthorized:
   emails: []
